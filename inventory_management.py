@@ -88,4 +88,34 @@ class InventoryManagement:
         print("-" * 50)
         for item, details in self.inventory.items():
             print(f"{item:<20} {details['price']:<10} {details['quantity']:<10}")
-         
+    
+    def run(self):
+        menu_options = {
+            '1': {'name': 'Add Item', 'function': self.add_item},
+            '2': {'name': 'Remove Item', 'function': self.remove_item},
+            '3': {'name': 'Search Item', 'function': self.search_item},
+            '4': {'name': 'Update Item', 'function': self.update_item},
+            '5': {'name': 'Display Inventory', 'function': self.display_inventory},
+            '6': {'name': 'Exit', 'function': None}
+        }
+        while True:
+            print("\nInventory Management System")
+            print("-" * 30)
+            for key, option in menu_options.items():
+                print(f"{key}. {option['name']}")
+
+            choice = input("Select an option (1-6): ")
+            
+            if choice in menu_options:
+                if choice == '6':
+                    print("Exiting the program.")
+                    break
+                    
+                menu_options[choice]['function']()
+                
+            else:
+                print("Invalid choice. Please select a valid option.")
+                
+if __name__ == "__main__":
+    inventory_management = InventoryManagement()
+    inventory_management.run()
