@@ -27,13 +27,15 @@ class SavingsAccount(BankAccount):
 if __name__ == "__main__":
     # Create a BankAccount instance
     account = BankAccount("3202010104")
-    account.deposit(5000)
-    account.withdraw(2000)
-    account.display_balance()
+    account.deposit(5500)
+    
 
     # Create a SavingsAccount instance
-    savings_account = SavingsAccount("3202110105", 10000)
-    savings_account.deposit(5000)
+    savings_account = SavingsAccount("3202110105", 20000)
+    savings_account.deposit(50000)
+    
+    # demonstrate method overriding
+    account.withdraw(2000)
     savings_account.withdraw(3000000)
-    savings_account.display_balance()
+
     
