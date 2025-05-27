@@ -52,11 +52,11 @@ if __name__ == "__main__":
     student = Student("Alice", 20, "22/U/10017/PS", "Computer Science")
     student.display_info()
 
-    print('=== Lecturer Information ===')
+    print('\n=== Lecturer Information ===')
     lecturer = Lecturer("Dr. Smith", 45,"2012/MAK/12", "Mathematics", 80000)
     lecturer.course_units = ["Calculus", "Linear Algebra"]
     lecturer.display_info()
 
-    print('=== Staff Information ===')
+    print('\n=== Staff Information ===')
     staff = Staff("John Doe", 30, "2023/MAK/100", "Administrative Assistant", 40000)
     staff.display_info()
