@@ -1,0 +1,81 @@
+import tweepy
+import schedule
+import time
+from datetime import datetime
+import os
+
+# X API credentials 
+API_KEY = os.getenv("X_API_KEY")
+API_SECRET = os.getenv("X_API_SECRET")
+ACCESS_TOKEN = os.getenv("X_ACCESS_TOKEN")
+ACCESS_SECRET = os.getenv("X_ACCESS_SECRET")
+
+if not all([API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_SECRET]):
+    raise ValueError("Missing required API credentials in environment variables")
+
+IMAGES = [
+    r"C:\Users\DELL\OneDrive\Pictures\X\monday.jpg",    
+    r"C:\Users\DELL\OneDrive\Pictures\X\tuesday.jpg",  
+    r"C:\Users\DELL\OneDrive\Pictures\X\wednesday.jpg",
+    r"C:\Users\DELL\OneDrive\Pictures\X\thursday.jpg",  
+    r"C:\Users\DELL\OneDrive\Pictures\X\friday.jpg"   
+]
+
+def post_image(simulate=True):
+    # Get the current weekday (0 = Monday, 1 = Tuesday, ..., 6 = Sunday)
+    weekday = datetime.now().weekday()
+    
+    # Only post Monday to Friday (weekday 0 to 4)
+    if weekday > 4:
+        print(f"No post scheduled for {datetime.now().strftime('%A')}.")
+        return
+
+    image_path = IMAGES[weekday]
+
+    # Verify image exists
+    if not os.path.exists(image_path):
+        print(f"Error: Image not found at {image_path}")
+        return
+
+    if simulate:
+        print(f"Simulated image post at {datetime.now().strftime('%Y-%m-%d %H:%M:%S %Z')} on {datetime.now().strftime('%A')}: {image_path}")
+        return
+
+    try:
+        # Authenticate with X API
+        client = tweepy.Client(
+            consumer_key=API_KEY,
+            consumer_secret=API_SECRET,
+            access_token=ACCESS_TOKEN,
+            access_token_secret=ACCESS_SECRET
+        )
+        # Authenticate for media upload (v1.1 API needed for media)
+        auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
+        auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
+        api = tweepy.API(auth)
+
+        # Upload image
+        media = api.media_upload(image_path)
+        media_id = media.media_id
+
+        # Post tweet with image only (no text)
+        client.create_tweet(text=" ", media_ids=[media_id])
+        print(f"Posted image at {datetime.now().strftime('%Y-%m-%d %H:%M:%S %Z')} on {datetime.now().strftime('%A')}: {image_path}")
+    except Exception as e:
+        print(f"Error posting to X: {e}")
+
+# Schedule the image post Monday to Friday at 7:00 AM EAT
+schedule.every().monday.at("7:00").do(post_image, simulate=False)
+schedule.every().tuesday.at("7:00").do(post_image, simulate=False)
+schedule.every().wednesday.at("7:00").do(post_image, simulate=False)
+schedule.every().thursday.at("7:00").do(post_image, simulate=False)
+schedule.every().friday.at("7:00").do(post_image, simulate=False)
+
+print("Script running. Press Ctrl+C to stop.")
+try:
+    # Keep the script running to check the schedule
+    while True:
+        schedule.run_pending()
+        time.sleep(60)  # Check every minute
+except KeyboardInterrupt:
+    print("Script stopped by user.")
