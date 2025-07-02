@@ -65,11 +65,11 @@ def post_image(simulate=True):
         print(f"Error posting to X: {e}")
 
 # Schedule the image post Monday to Friday at 7:00 AM EAT
-schedule.every().monday.at("7:00").do(post_image, simulate=False)
-schedule.every().tuesday.at("7:00").do(post_image, simulate=False)
-schedule.every().wednesday.at("7:00").do(post_image, simulate=False)
-schedule.every().thursday.at("7:00").do(post_image, simulate=False)
-schedule.every().friday.at("7:00").do(post_image, simulate=False)
+schedule.every().monday.at("07:00").do(post_image, simulate=False)
+schedule.every().tuesday.at("07:00").do(post_image, simulate=False)
+schedule.every().wednesday.at("07:00").do(post_image, simulate=False)
+schedule.every().thursday.at("07:00").do(post_image, simulate=False)
+schedule.every().friday.at("07:00").do(post_image, simulate=False)
 
 print("Script running. Press Ctrl+C to stop.")
 try:
